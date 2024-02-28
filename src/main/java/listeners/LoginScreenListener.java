@@ -34,7 +34,7 @@ public class LoginScreenListener implements ActionListener {
         }
     }
 
-    public void login(String adminId, String adminPassword) {
+    private void login(String adminId, String adminPassword) {
         if(!(adminId.isEmpty() || adminPassword.isEmpty())) {
             try {
                 Connection conn = DriverManager.getConnection(DB.url, DB.username, DB.password);
@@ -65,6 +65,7 @@ public class LoginScreenListener implements ActionListener {
                 else { // Failed Login
                     JOptionPane.showMessageDialog(null, "Invalid Admin Data", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                conn.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -74,7 +75,7 @@ public class LoginScreenListener implements ActionListener {
         }
     }
 
-    public String[] generateAuthToken(String adminId, String adminPassword) throws URISyntaxException {
+    private String[] generateAuthToken(String adminId, String adminPassword) throws URISyntaxException {
         Map<String, String> headers = new HashMap<>();
         headers.put("admin_id", adminId);
         headers.put("admin_password", adminPassword);

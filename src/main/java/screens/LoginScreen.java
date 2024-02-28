@@ -4,6 +4,7 @@ import listeners.LoginScreenListener;
 import screens_common_things.TitleBar;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class LoginScreen extends JFrame {
@@ -22,12 +23,13 @@ public class LoginScreen extends JFrame {
         setVisible(true);
     }
 
-    public void initComponents() {
+    private void initComponents() {
         JPanel titleBar = new TitleBar("Login", this).getTitleBarPanel();
         add(titleBar, BorderLayout.NORTH);
         adminIdLabel = new JLabel("Admin ID");
         adminPasswordLabel = new JLabel("Admin Password");
-        styleFieldLabels();
+        styleFieldLabels(adminIdLabel);
+        styleFieldLabels(adminPasswordLabel);
         adminIdField = new JTextField();
         JPanel adminIdFieldPanel = new JPanel();
         adminIdFieldPanel.setBackground(Color.WHITE);
@@ -36,7 +38,8 @@ public class LoginScreen extends JFrame {
         JPanel adminPasswordFieldPanel = new JPanel();
         adminPasswordFieldPanel.setBackground(Color.WHITE);
         adminPasswordFieldPanel.add(adminPasswordField);
-        styleInputFields();
+        styleInputFields(adminIdField);
+        styleInputFields(adminPasswordField);
         loginButton = new JButton("Login");
         loginButton.addActionListener(new LoginScreenListener(this));
         styleLoginButton();
@@ -53,29 +56,21 @@ public class LoginScreen extends JFrame {
         add(loginMainPanel, BorderLayout.CENTER);
     }
 
-    public void styleFieldLabels() {
-        adminIdLabel.setForeground(Color.BLACK);
-        adminIdLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        adminIdLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        adminIdLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        adminPasswordLabel.setForeground(Color.BLACK);
-        adminPasswordLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        adminPasswordLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        adminPasswordLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+    private void styleFieldLabels(JLabel label) {
+        label.setForeground(Color.BLACK);
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(SwingConstants.BOTTOM);
     }
 
-    public void styleInputFields() {
-        adminIdField.setForeground(Color.BLACK);
-        adminIdField.setBorder(new LineBorder(Color.GREEN, 2));
-        adminIdField.setFont(new Font("Arial", Font.BOLD, 20));
-        adminIdField.setPreferredSize(new Dimension(400, 100));
-        adminPasswordField.setForeground(Color.BLACK);
-        adminPasswordField.setBorder(new LineBorder(Color.GREEN, 2));
-        adminPasswordField.setFont(new Font("Arial", Font.BOLD, 20));
-        adminPasswordField.setPreferredSize(new Dimension(400, 100));
+    private void styleInputFields(JTextComponent field) {
+        field.setForeground(Color.BLACK);
+        field.setBorder(new LineBorder(Color.GREEN, 2));
+        field.setFont(new Font("Arial", Font.BOLD, 20));
+        field.setPreferredSize(new Dimension(400, 100));
     }
 
-    public void styleLoginButton() {
+    private void styleLoginButton() {
         loginButton.setForeground(Color.WHITE);
         loginButton.setBackground(Color.GREEN);
         loginButton.setFocusable(false);

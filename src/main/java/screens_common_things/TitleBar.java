@@ -15,7 +15,7 @@ public class TitleBar {
         setListeners(screen);
     }
 
-    public void initComponents(String titleText) {
+    private void initComponents(String titleText) {
         titleBarPanel = new JPanel();
         titleBarPanel.setLayout(new GridLayout(1, 2));
         titleBarPanel.setBackground(Color.WHITE);
@@ -38,12 +38,12 @@ public class TitleBar {
         titleBarPanel.add(titleBarRightPanel);
     }
 
-    public void setListeners(JFrame screen) {
-        exitButton.addActionListener(new CommonListener(screen));
-        minimizeButton.addActionListener(new CommonListener(screen));
+    private void setListeners(JFrame screen) {
+        exitButton.addActionListener(new CommonListener(screen, "X"));
+        minimizeButton.addActionListener(new CommonListener(screen, "_"));
     }
 
-    public void styleExitButton() {
+    private void styleExitButton() {
         exitButton.setBackground(Color.RED);
         exitButton.setForeground(Color.WHITE);
         exitButton.setFont(new Font("Arial", Font.BOLD, 20));
@@ -51,7 +51,7 @@ public class TitleBar {
         exitButton.setFocusable(false);
     }
 
-    public void styleMinimizeButton() {
+    private void styleMinimizeButton() {
         minimizeButton.setBackground(Color.BLUE);
         minimizeButton.setForeground(Color.WHITE);
         minimizeButton.setFont(new Font("Arial", Font.BOLD, 20));
@@ -59,7 +59,7 @@ public class TitleBar {
         minimizeButton.setFocusable(false);
     }
 
-    public void styleTitleLabel() {
+    private void styleTitleLabel() {
         titleLabel.setForeground(Color.DARK_GRAY);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 50));
     }

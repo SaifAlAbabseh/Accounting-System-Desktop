@@ -22,14 +22,14 @@ public class MainScreen extends JFrame{
         setVisible(true);
     }
 
-    public void initComponents() {
+    private void initComponents() {
         JPanel titleBar = new TitleBar("Welcome", this).getTitleBarPanel();
         JPanel logoutButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         adminIdLabel = new JLabel("<html><center>Admin ID<br>" + AdminInfo.adminId + "</center></html>");
         adminNameLabel = new JLabel("<html><center>Admin Name<br>" + AdminInfo.adminName + "</center></html>");
         styleAdminInfoLabels();
         logoutButton = new JButton("Logout");
-        logoutButton.addActionListener(new MainScreenListener(this));
+        logoutButton.addActionListener(new MainScreenListener(this, "logout"));
         styleLogoutButton();
         logoutButtonPanel.add(logoutButton);
         logoutButtonPanel.add(adminIdLabel);
@@ -42,16 +42,20 @@ public class MainScreen extends JFrame{
         featuresPanel = new JPanel();
         featuresPanel.setBackground(Color.WHITE);
         insertProductsButton = new JButton("<html><div style='text-align: center; width: 100px;'>Insert Products</div></html>");
+        insertProductsButton.addActionListener(new MainScreenListener(this, "insert-products"));
         insertProductsByImportButton = new JButton("<html><div style='text-align: center; width: 100px;'>Insert Products By Importing File</div></html>");
+        insertProductsByImportButton.addActionListener(new MainScreenListener(this, "insert-products-by-import"));
         viewProductsButton = new JButton("<html><div style='text-align: center; width: 100px;'>View Inserted Products</div></html>");
+        viewProductsButton.addActionListener(new MainScreenListener(this, "view-products"));
         administrationButton = new JButton("<html><div style='text-align: center; width: 100px;'>Administration</div></html>");
+        administrationButton.addActionListener(new MainScreenListener(this, "administration"));
         styleFeatures();
         showFeatures();
         add(titleBarMainPanel, BorderLayout.NORTH);
         add(featuresPanel, BorderLayout.CENTER);
     }
 
-    public void styleLogoutButton() {
+    private void styleLogoutButton() {
         logoutButton.setForeground(Color.WHITE);
         logoutButton.setBackground(Color.RED);
         logoutButton.setFocusable(false);
@@ -60,14 +64,14 @@ public class MainScreen extends JFrame{
         logoutButton.setPreferredSize(new Dimension(200, 100));
     }
 
-    public void styleAdminInfoLabels() {
+    private void styleAdminInfoLabels() {
         adminIdLabel.setForeground(Color.DARK_GRAY);
         adminIdLabel.setFont(new Font("Arial", Font.BOLD, 30));
         adminNameLabel.setForeground(Color.DARK_GRAY);
         adminNameLabel.setFont(new Font("Arial", Font.BOLD, 30));
     }
 
-    public void showFeatures() {
+    private void showFeatures() {
         if(AdminInfo.hasInsertPrivilege.equals("1")) {
             featuresPanel.add(insertProductsButton);
             featuresPanel.add(insertProductsByImportButton);
@@ -80,7 +84,7 @@ public class MainScreen extends JFrame{
         }
     }
 
-    public void styleFeatures() {
+    private void styleFeatures() {
         insertProductsButton.setBackground(new Color(0, 0, 255));
         insertProductsByImportButton.setBackground(new Color(165, 42, 42));
         viewProductsButton.setBackground(new Color(0, 0, 0));
@@ -91,7 +95,7 @@ public class MainScreen extends JFrame{
         styleFeaturesCommon(administrationButton);
     }
 
-    public void styleFeaturesCommon(JButton button) {
+    private void styleFeaturesCommon(JButton button) {
         button.setForeground(Color.WHITE);
         button.setFont(new Font("Arial", Font.BOLD, 30));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
