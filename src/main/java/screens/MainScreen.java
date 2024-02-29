@@ -2,6 +2,7 @@ package screens;
 
 import listeners.MainScreenListener;
 import screens_common_things.AdminInfo;
+import screens_common_things.ScreenConfig;
 import screens_common_things.TitleBar;
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,7 @@ public class MainScreen extends JFrame{
 
     public MainScreen() {
         initComponents();
-        setUndecorated(true);
-        setExtendedState(MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.WHITE);
-        setVisible(true);
+        ScreenConfig.initFrame(this);
     }
 
     private void initComponents() {

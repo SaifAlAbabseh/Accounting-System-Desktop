@@ -3,6 +3,7 @@ package screens;
 import listeners.InsertProductsScreenListener;
 import screens_common_things.AdminInfo;
 import screens_common_things.GoBackButton;
+import screens_common_things.ScreenConfig;
 import screens_common_things.TitleBar;
 import util.DB;
 
@@ -23,20 +24,11 @@ public class InsertProductsScreen extends JFrame {
 
     public InsertProductsScreen() {
         initComponents();
-        setUndecorated(true);
-        setExtendedState(MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        getContentPane().setBackground(Color.WHITE);
-        setVisible(true);
+        ScreenConfig.initFrame(this);
     }
 
     private void initComponents() {
-        JPanel titleBar = new TitleBar("Insert Products", this).getTitleBarPanel();
-        JPanel goBackButtonPanel = new GoBackButton(this).getGoBackButtonPanel();
-        JPanel titleBarMainPanel = new JPanel(new GridLayout(2, 1));
-        titleBarMainPanel.setBackground(Color.WHITE);
-        titleBarMainPanel.add(titleBar);
-        titleBarMainPanel.add(goBackButtonPanel);
+        ScreenConfig.initTitleBar(this, "Insert Products");
         JLabel productNameLabel = new JLabel("Product Name");
         JLabel productPriceLabel = new JLabel("Product Price");
         JLabel productQuantityLabel = new JLabel("Quantity");
@@ -91,7 +83,6 @@ public class InsertProductsScreen extends JFrame {
         labelsAndFieldPanel.add(inputFieldsPanel);
         insertPanel.add(labelsAndFieldPanel);
         insertPanel.add(insertButtonPanel);
-        add(titleBarMainPanel, BorderLayout.NORTH);
         add(insertPanel, BorderLayout.CENTER);
     }
 

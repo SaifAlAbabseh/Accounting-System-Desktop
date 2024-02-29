@@ -1,5 +1,6 @@
 package listeners;
 
+import screens.AdministrationScreen;
 import screens.InsertProductsScreen;
 import screens.LoginScreen;
 import screens.MainScreen;
@@ -36,7 +37,8 @@ public class MainScreenListener implements ActionListener {
             //mainScreen.dispose();
         }
         else if(clickedButton.equals("administration")) {
-            //mainScreen.dispose();
+            mainScreen.dispose();
+            new AdministrationScreen();
         }
     }
 }
