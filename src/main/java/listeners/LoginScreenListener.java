@@ -80,7 +80,11 @@ public class LoginScreenListener implements ActionListener {
         headers.put("admin_id", adminId);
         headers.put("admin_password", adminPassword);
         URI apiURL = new URI(Host.domainForAPIs + "/generateAuthToken.php");
-        Response response = RestAssured.with().headers(headers).request("GET", apiURL);
+        Response response =
+                RestAssured.
+                        with().
+                        headers(headers).
+                        request("GET", apiURL);
         String error = response.jsonPath().getString("error");
         if(response.getStatusCode() == 200) {
             return new String[] {response.jsonPath().getString("auth_token")};

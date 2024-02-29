@@ -2,6 +2,7 @@ package screens;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import listeners.AdministrationScreenListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import screens_common_things.AdminInfo;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class AdministrationScreen extends JFrame {
@@ -31,7 +33,7 @@ public class AdministrationScreen extends JFrame {
         ScreenConfig.initFrame(this);
         try {
             Response[] responses = getAdmins();
-            if(responses.length > 1) {
+            if (responses.length > 1) {
                 JOptionPane.showMessageDialog(null, responses[0].jsonPath().getString("error"), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (URISyntaxException e) {
@@ -67,7 +69,7 @@ public class AdministrationScreen extends JFrame {
         resultsBodyPanelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         JLabel filterLabel = new JLabel("Filter: ");
         Styles.styleLabel(filterLabel);
-        filterMenu = new JComboBox<>(new String[] {"", "Admin ID", "Admin Name"});
+        filterMenu = new JComboBox<>(new String[]{"", "Admin ID", "Admin Name"});
         Styles.styleInputField(filterMenu);
         filterInputField = new JTextField();
         Styles.styleInputField(filterInputField);
@@ -114,29 +116,66 @@ public class AdministrationScreen extends JFrame {
         headers.put("auth_token", new Session().getAuthToken());
         headers.put("admin_id", AdminInfo.adminId);
         //Get the search header and search value
-        String searchHeader = (filterMenuSelected == 0 || filterMenuSelected == 1)?"admin_id":"admin_name";
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("searchCriteriaHeader", searchHeader);
-        jsonObject.put("searchCriteriaValue", filterValue);
-        Response response = RestAssured.with().headers(headers).body(jsonObject.toString()).request("GET", apiURL);
-        if(response.getStatusCode() == 200) {
+        String searchHeader = (filterMenuSelected == 0 || filterMenuSelected == 1) ? "admin_id" : "admin_name";
+        Response response =
+                RestAssured.
+                        given().
+                        headers(headers).
+                        queryParam("searchCriteriaHeader", searchHeader).
+                        queryParam("searchCriteriaValue", filterValue).
+                        request("GET", apiURL);
+        if (response.getStatusCode() == 200) {
             showResults(response);
-            return new Response[] {null};
-        }
-        else return new Response[] {response, null};
+            return new Response[]{null};
+        } else return new Response[]{response, null};
     }
 
     private void showResults(Response response) {
-        JSONArray array = new JSONArray(response.jsonPath().getString("admins"));
+        JSONArray array = new JSONArray(response.jsonPath().getList("admins"));
         for (int i = 0; i < array.length(); i++) {
             JSONObject object = array.getJSONObject(i);
             JPanel resultPanel = new JPanel(new GridLayout(1, 6));
-            for(String key : object.keySet()) {
-                if() {
-
-                }
-                resultPanel.add();
-            }
+            resultPanel.setPreferredSize(new Dimension(resultPanel.getPreferredSize().width, 100));
+            addComponent(object, resultPanel);
+            resultsBodyPanel.add(resultPanel);
         }
+    }
+
+    private void addComponent(JSONObject object, JPanel resultPanel) {
+
+
+        JLabel adminIdLabel = new JLabel(object.getString("admin_id"));
+        Styles.styleLabel(adminIdLabel);
+        resultPanel.add(adminIdLabel);
+
+        JLabel adminNameLabel = new JLabel(object.getString("admin_name"));
+        Styles.styleLabel(adminNameLabel);
+        resultPanel.add(adminNameLabel);
+
+        JLabel adminPasswordLabel = new JLabel(object.getString("admin_password"));
+        Styles.styleLabel(adminPasswordLabel);
+        resultPanel.add(adminPasswordLabel);
+
+        String adminId = object.getString("admin_id");
+        String[] menuItems;
+
+        if (object.getString("is_super_admin").equals("1")) menuItems = new String[]{"yes", "no"};
+        else menuItems = new String[]{"no", "yes"};
+        JComboBox<String> isSuperAdminMenu = new JComboBox<>(menuItems);
+        isSuperAdminMenu.addItemListener(new AdministrationScreenListener(adminId, "is_super_admin"));
+        resultPanel.add(isSuperAdminMenu);
+
+        if (object.getString("has_insert_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
+        else menuItems = new String[]{"no", "yes"};
+        JComboBox<String> hasInsertPrivilegeMenu = new JComboBox<>(menuItems);
+        hasInsertPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_insert_privilege"));
+        resultPanel.add(hasInsertPrivilegeMenu);
+
+        if (object.getString("has_view_edit_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
+        else menuItems = new String[]{"no", "yes"};
+        JComboBox<String> hasViewEditPrivilegeMenu = new JComboBox<>(menuItems);
+        hasViewEditPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_view_edit_privilege"));
+        resultPanel.add(hasViewEditPrivilegeMenu);
+
     }
 }
