@@ -5,10 +5,7 @@ import io.restassured.response.Response;
 import listeners.AdministrationScreenListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import screens_common_things.AdminInfo;
-import screens_common_things.ScreenConfig;
-import screens_common_things.Session;
-import screens_common_things.Styles;
+import screens_common_things.*;
 import util.Host;
 
 import javax.swing.*;
@@ -73,15 +70,17 @@ public class AdministrationScreen extends JFrame {
         Styles.styleInputField(filterMenu);
         filterInputField = new JTextField();
         Styles.styleInputField(filterInputField);
-        mainPanel = new JPanel(new GridLayout(3, 1));
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
         addNewAdminButtonLinkPanel = new JPanel();
+        addNewAdminButtonLinkPanel.setAlignmentY(SwingConstants.NORTH);
         addNewAdminButtonLinkPanel.setBackground(Color.WHITE);
         filterPanel = new JPanel();
         filterPanel.setBackground(Color.WHITE);
         resultsPanel = new JPanel();
         resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
-        resultsPanel.setPreferredSize(new Dimension(resultsPanel.getPreferredSize().width, resultsPanel.getPreferredSize().height + 500));
+        resultsPanel.setPreferredSize(new Dimension(resultsPanel.getPreferredSize().width, resultsPanel.getPreferredSize().height + 200));
         resultsPanel.setBackground(Color.WHITE);
         resultsPanel.add(resultsHeaderPanel);
         resultsPanel.add(resultsBodyPanelScroll);
@@ -136,46 +135,79 @@ public class AdministrationScreen extends JFrame {
             JSONObject object = array.getJSONObject(i);
             JPanel resultPanel = new JPanel(new GridLayout(1, 6));
             resultPanel.setPreferredSize(new Dimension(resultPanel.getPreferredSize().width, 100));
-            addComponent(object, resultPanel);
+            addComponent(object, resultPanel, i);
             resultsBodyPanel.add(resultPanel);
         }
     }
 
-    private void addComponent(JSONObject object, JPanel resultPanel) {
+    private void addComponent(JSONObject object, JPanel resultPanel, int i) {
 
+        String adminId = object.getString("admin_id");
 
+        Color panelColor = Color.WHITE;
+        if(i % 2 == 0) panelColor = Color.BLUE;
+
+        JPanel adminIdAndDeleteButtonPanel = new JPanel();
+        adminIdAndDeleteButtonPanel.setLayout(new BoxLayout(adminIdAndDeleteButtonPanel, BoxLayout.X_AXIS));
+        adminIdAndDeleteButtonPanel.setAlignmentX(SwingConstants.CENTER);
+        adminIdAndDeleteButtonPanel.setBackground(panelColor);
+        JButton deleteAdminButton = new JButton("X");
+        styleButton(deleteAdminButton, Color.RED, new Dimension(100, 100));
         JLabel adminIdLabel = new JLabel(object.getString("admin_id"));
         Styles.styleLabel(adminIdLabel);
-        resultPanel.add(adminIdLabel);
+        adminIdLabel.setVerticalAlignment(SwingConstants.CENTER);
+        adminIdAndDeleteButtonPanel.add(deleteAdminButton);
+        adminIdAndDeleteButtonPanel.add(adminIdLabel);
+        resultPanel.add(adminIdAndDeleteButtonPanel);
+
+
+        resultPanel.setBackground(panelColor);
+        resultPanel.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        deleteAdminButton.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        deleteAdminButton.addActionListener(new AdministrationScreenListener(adminId, resultsBodyPanel, resultPanel));
 
         JLabel adminNameLabel = new JLabel(object.getString("admin_name"));
         Styles.styleLabel(adminNameLabel);
+        adminNameLabel.setVerticalAlignment(SwingConstants.CENTER);
         resultPanel.add(adminNameLabel);
 
         JLabel adminPasswordLabel = new JLabel(object.getString("admin_password"));
         Styles.styleLabel(adminPasswordLabel);
+        adminPasswordLabel.setVerticalAlignment(SwingConstants.CENTER);
         resultPanel.add(adminPasswordLabel);
 
-        String adminId = object.getString("admin_id");
         String[] menuItems;
 
         if (object.getString("is_super_admin").equals("1")) menuItems = new String[]{"yes", "no"};
         else menuItems = new String[]{"no", "yes"};
         JComboBox<String> isSuperAdminMenu = new JComboBox<>(menuItems);
-        isSuperAdminMenu.addItemListener(new AdministrationScreenListener(adminId, "is_super_admin"));
+        isSuperAdminMenu.addItemListener(new AdministrationScreenListener(adminId, "is_super_admin", isSuperAdminMenu));
         resultPanel.add(isSuperAdminMenu);
+        isSuperAdminMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
 
         if (object.getString("has_insert_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
         else menuItems = new String[]{"no", "yes"};
         JComboBox<String> hasInsertPrivilegeMenu = new JComboBox<>(menuItems);
-        hasInsertPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_insert_privilege"));
+        hasInsertPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_insert_privilege", hasInsertPrivilegeMenu));
         resultPanel.add(hasInsertPrivilegeMenu);
+        hasInsertPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
 
         if (object.getString("has_view_edit_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
         else menuItems = new String[]{"no", "yes"};
         JComboBox<String> hasViewEditPrivilegeMenu = new JComboBox<>(menuItems);
-        hasViewEditPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_view_edit_privilege"));
+        hasViewEditPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_view_edit_privilege", hasViewEditPrivilegeMenu));
         resultPanel.add(hasViewEditPrivilegeMenu);
+        hasViewEditPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
 
+        styleMenu(isSuperAdminMenu);
+        styleMenu(hasInsertPrivilegeMenu);
+        styleMenu(hasViewEditPrivilegeMenu);
+
+    }
+
+    private void styleMenu(JComboBox<String> menu) {
+        menu.setFont(new Font("Arial", Font.BOLD, 25));
+        menu.setForeground(Color.BLUE);
+        menu.setFocusable(false);
     }
 }
