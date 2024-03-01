@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import screens.AdministrationScreen;
 import screens_common_things.AdminInfo;
+import screens_common_things.GetAdminsAPICommon;
 import screens_common_things.Session;
 import util.Host;
 
@@ -19,9 +20,22 @@ public class AdministrationScreenListener implements ItemListener, MouseListener
 
     private String adminId, whichPrivilege;
     private JComboBox<String> menu;
-    private JPanel panel, adminIdAndDeleteButtonPanel, rowToDelete;
+    private JPanel panel, adminIdAndDeleteButtonPanel, rowToDelete, resultsBodyPanel;
     private Color panelColor;
+    private JComboBox<String>  filterMenu;
+    private JTextField filterInputField;
+    private AdministrationScreen administrationScreen;
     private JButton deleteAdminButton;
+
+    public AdministrationScreenListener(AdministrationScreen administrationScreen) {
+        this.administrationScreen = administrationScreen;
+    }
+
+    public AdministrationScreenListener(JComboBox<String> filterMenu, JTextField filterInputField, JPanel resultsBodyPanel) {
+        this.resultsBodyPanel = resultsBodyPanel;
+        this.filterMenu = filterMenu;
+        this.filterInputField = filterInputField;
+    }
 
     public AdministrationScreenListener(String adminId, String whichPrivilege, JComboBox<String> menu) {
         this.adminId = adminId;
@@ -111,6 +125,23 @@ public class AdministrationScreenListener implements ItemListener, MouseListener
             catch(Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+        else if(e.getActionCommand().equals("GO")) {
+            int filterMenuSelected = filterMenu.getSelectedIndex();
+            String filterValue = filterInputField.getText().trim();
+            GetAdminsAPICommon commonMethods = new GetAdminsAPICommon(filterMenuSelected, filterValue, resultsBodyPanel);
+            try {
+                Response[] responses = commonMethods.getAdmins();
+                if (responses.length > 1) {
+                    JOptionPane.showMessageDialog(null, responses[0].jsonPath().getString("error"), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (URISyntaxException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else if(e.getActionCommand().equals("Add New Admin")) {
+            administrationScreen.setEnabled(false);
+            administrationScreen.showAddNewAdminScreen();
         }
     }
 

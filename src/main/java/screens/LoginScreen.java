@@ -25,8 +25,8 @@ public class LoginScreen extends JFrame {
         add(titleBar, BorderLayout.NORTH);
         JLabel adminIdLabel = new JLabel("Admin ID");
         JLabel adminPasswordLabel = new JLabel("Admin Password");
-        Styles.styleLabel(adminIdLabel);
-        Styles.styleLabel(adminPasswordLabel);
+        Styles.styleLabel(adminIdLabel, Color.BLACK);
+        Styles.styleLabel(adminPasswordLabel, Color.BLACK);
         adminIdField = new JTextField();
         JPanel adminIdFieldPanel = new JPanel();
         adminIdFieldPanel.setBackground(Color.WHITE);

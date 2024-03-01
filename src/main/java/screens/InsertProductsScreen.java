@@ -283,7 +283,8 @@ public class InsertProductsScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("X")) {
                 this.dispose();
-                insertProductsScreen.setEnabled(true);
+                insertProductsScreen.dispose();
+                new InsertProductsScreen();
             }
             else if(e.getActionCommand().equals("Update") || e.getActionCommand().equals("Delete")) {
                 try {
@@ -313,7 +314,8 @@ public class InsertProductsScreen extends JFrame {
                         int result = stmt.executeUpdate(query);
                         if(result == 0) throw new Exception("Couldn't delete the product, please try again");
                         this.dispose();
-                        insertProductsScreen.setEnabled(true);
+                        insertProductsScreen.dispose();
+                        new InsertProductsScreen();
                     }
                     stmt.close();
                     conn.close();

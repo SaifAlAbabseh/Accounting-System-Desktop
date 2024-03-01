@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class Styles {
 
-    public static void styleLabel(JLabel label) {
-        label.setForeground(Color.BLACK);
+    public static void styleLabel(JLabel label, Color textColor) {
+        label.setForeground(textColor);
         label.setFont(new Font("Arial", Font.BOLD, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.BOTTOM);
