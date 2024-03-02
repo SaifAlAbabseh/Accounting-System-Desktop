@@ -39,7 +39,7 @@ public class LoginScreenListener implements ActionListener {
             try {
                 Connection conn = DriverManager.getConnection(DB.url, DB.username, DB.password);
                 Statement stmt = conn.createStatement();
-                String query = "SELECT `admin_id`, `admin_name`, `is_super_admin`, `has_insert_privilege`, `has_view_edit_privilege` FROM admins WHERE admin_id='" + adminId + "' AND admin_password='" + adminPassword + "'";
+                String query = "SELECT `admin_id`, `admin_name`, `is_super_admin`, `has_insert_privilege`, `has_view_edit_privilege` FROM admins WHERE BINARY admin_id='" + adminId + "' AND admin_password='" + adminPassword + "'";
                 ResultSet result = stmt.executeQuery(query);
                 if(result.next()) { // Success Login
                     String[] authToken = generateAuthToken(adminId, adminPassword);

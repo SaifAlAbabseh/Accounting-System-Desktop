@@ -3,11 +3,9 @@ package listeners;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import screens.AdministrationScreen;
-import screens_common_things.AdminInfo;
 import screens_common_things.GetAdminsAPICommon;
 import screens_common_things.Session;
 import util.Host;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -25,7 +23,6 @@ public class AdministrationScreenListener implements ItemListener, MouseListener
     private JComboBox<String>  filterMenu;
     private JTextField filterInputField;
     private AdministrationScreen administrationScreen;
-    private JButton deleteAdminButton;
 
     public AdministrationScreenListener(AdministrationScreen administrationScreen) {
         this.administrationScreen = administrationScreen;
@@ -43,11 +40,10 @@ public class AdministrationScreenListener implements ItemListener, MouseListener
         this.menu = menu;
     }
 
-    public AdministrationScreenListener(JPanel adminIdAndDeleteButtonPanel, JPanel panel, Color panelColor, JButton deleteAdminButton) {
+    public AdministrationScreenListener(JPanel adminIdAndDeleteButtonPanel, JPanel panel, Color panelColor) {
         this.panel = panel;
         this.adminIdAndDeleteButtonPanel = adminIdAndDeleteButtonPanel;
         this.panelColor = panelColor;
-        this.deleteAdminButton = deleteAdminButton;
     }
 
     public AdministrationScreenListener(String adminId, JPanel panel, JPanel rowToDelete) {

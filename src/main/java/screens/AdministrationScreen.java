@@ -1,31 +1,19 @@
 package screens;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import listeners.AdministrationScreenListener;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import screens_common_things.*;
 import util.DB;
-import util.Host;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class AdministrationScreen extends JFrame {
 

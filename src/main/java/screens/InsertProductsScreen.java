@@ -1,12 +1,8 @@
 package screens;
 
 import listeners.InsertProductsScreenListener;
-import screens_common_things.AdminInfo;
-import screens_common_things.GoBackButton;
 import screens_common_things.ScreenConfig;
-import screens_common_things.TitleBar;
 import util.DB;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;

@@ -3,7 +3,6 @@ package listeners;
 import screens.InsertProductsScreen;
 import screens_common_things.AdminInfo;
 import util.DB;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

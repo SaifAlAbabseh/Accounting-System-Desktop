@@ -1,11 +1,6 @@
 package listeners;
 
-import screens.AdministrationScreen;
-import screens.InsertProductsScreen;
-import screens.LoginScreen;
-import screens.MainScreen;
-
-import javax.swing.*;
+import screens.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,8 +25,8 @@ public class MainScreenListener implements ActionListener {
             new InsertProductsScreen();
         }
         else if(clickedButton.equals("insert-products-by-import")) {
-            //mainScreen.dispose();
-
+            mainScreen.dispose();
+            new InsertProductsByImportScreen();
         }
         else if(clickedButton.equals("view-products")) {
             //mainScreen.dispose();

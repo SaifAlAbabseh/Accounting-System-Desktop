@@ -5,8 +5,6 @@ import screens_common_things.ScreenConfig;
 import screens_common_things.Styles;
 import screens_common_things.TitleBar;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class LoginScreen extends JFrame {

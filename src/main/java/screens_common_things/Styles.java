@@ -2,7 +2,6 @@ package screens_common_things;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class Styles {

@@ -88,8 +88,8 @@ public class GetAdminsAPICommon {
 
 
         resultPanel.setBackground(panelColor);
-        resultPanel.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
-        deleteAdminButton.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        resultPanel.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor));
+        deleteAdminButton.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor));
         deleteAdminButton.addActionListener(new AdministrationScreenListener(adminId, resultsBodyPanel, resultPanel));
 
         JLabel adminNameLabel = new JLabel(object.getString("admin_name"));
@@ -109,21 +109,21 @@ public class GetAdminsAPICommon {
         JComboBox<String> isSuperAdminMenu = new JComboBox<>(menuItems);
         isSuperAdminMenu.addItemListener(new AdministrationScreenListener(adminId, "is_super_admin", isSuperAdminMenu));
         resultPanel.add(isSuperAdminMenu);
-        isSuperAdminMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        isSuperAdminMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor));
 
         if (object.getString("has_insert_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
         else menuItems = new String[]{"no", "yes"};
         JComboBox<String> hasInsertPrivilegeMenu = new JComboBox<>(menuItems);
         hasInsertPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_insert_privilege", hasInsertPrivilegeMenu));
         resultPanel.add(hasInsertPrivilegeMenu);
-        hasInsertPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        hasInsertPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor));
 
         if (object.getString("has_view_edit_privilege").equals("1")) menuItems = new String[]{"yes", "no"};
         else menuItems = new String[]{"no", "yes"};
         JComboBox<String> hasViewEditPrivilegeMenu = new JComboBox<>(menuItems);
         hasViewEditPrivilegeMenu.addItemListener(new AdministrationScreenListener(adminId, "has_view_edit_privilege", hasViewEditPrivilegeMenu));
         resultPanel.add(hasViewEditPrivilegeMenu);
-        hasViewEditPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor, deleteAdminButton));
+        hasViewEditPrivilegeMenu.addMouseListener(new AdministrationScreenListener(adminIdAndDeleteButtonPanel, resultPanel, panelColor));
 
         styleMenu(isSuperAdminMenu);
         styleMenu(hasInsertPrivilegeMenu);
