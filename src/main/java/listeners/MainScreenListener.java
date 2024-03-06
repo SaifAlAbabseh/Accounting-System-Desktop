@@ -29,7 +29,8 @@ public class MainScreenListener implements ActionListener {
             new InsertProductsByImportScreen();
         }
         else if(clickedButton.equals("view-products")) {
-            //mainScreen.dispose();
+            mainScreen.dispose();
+            new ViewProductsScreen();
         }
         else if(clickedButton.equals("administration")) {
             mainScreen.dispose();

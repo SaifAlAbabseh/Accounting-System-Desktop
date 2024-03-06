@@ -20,7 +20,7 @@ public class AdministrationScreen extends JFrame {
     private JButton addNewAdminButtonLink, filterButton;
     private JComboBox<String> filterMenu;
     private JTextField filterInputField;
-    private JPanel mainPanel, addNewAdminButtonLinkPanel, filterPanel, resultsHeaderPanel, resultsPanel, resultsBodyPanel;
+    private JPanel mainPanel, addNewAdminButtonLinkPanel, filterPanel, resultsPanel, resultsBodyPanel;
     private GetAdminsAPICommon commonMethods;
 
     public AdministrationScreen() {
@@ -29,41 +29,16 @@ public class AdministrationScreen extends JFrame {
         ScreenConfig.initFrame(this);
         commonMethods = new GetAdminsAPICommon(resultsBodyPanel);
         try {
-            Response[] responses = commonMethods.getAdmins();
-            if (responses.length > 1) {
-                JOptionPane.showMessageDialog(null, responses[0].jsonPath().getString("error"), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (URISyntaxException e) {
+            commonMethods.getAdmins();
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void initComponents() {
-        JLabel adminIdLabel = new JLabel("Admin ID"),
-                adminNameLabel = new JLabel("Admin Name"),
-                adminPasswordLabel = new JLabel("Admin Password"),
-                isSuperAdminLabel = new JLabel("Is Super Admin"),
-                hasInsertPrivilegeLabel = new JLabel("Has Insert Privilege"),
-                hasViewEditPrivilegeLabel = new JLabel("Has View/Edit Privilege");
-        Styles.styleLabel(adminIdLabel, Color.BLACK);
-        Styles.styleLabel(adminNameLabel, Color.BLACK);
-        Styles.styleLabel(adminPasswordLabel, Color.BLACK);
-        Styles.styleLabel(isSuperAdminLabel, Color.BLACK);
-        Styles.styleLabel(hasInsertPrivilegeLabel, Color.BLACK);
-        Styles.styleLabel(hasViewEditPrivilegeLabel, Color.BLACK);
-        resultsHeaderPanel = new JPanel(new GridLayout(1, 6));
-        resultsHeaderPanel.add(adminIdLabel);
-        resultsHeaderPanel.add(adminNameLabel);
-        resultsHeaderPanel.add(adminPasswordLabel);
-        resultsHeaderPanel.add(isSuperAdminLabel);
-        resultsHeaderPanel.add(hasInsertPrivilegeLabel);
-        resultsHeaderPanel.add(hasViewEditPrivilegeLabel);
-        resultsHeaderPanel.setBackground(Color.WHITE);
-        resultsBodyPanel = new JPanel();
-        resultsBodyPanel.setLayout(new BoxLayout(resultsBodyPanel, BoxLayout.Y_AXIS));
-        resultsBodyPanel.setBackground(Color.WHITE);
-        JScrollPane resultsBodyPanelScroll = new JScrollPane(resultsBodyPanel);
-        resultsBodyPanelScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        String[] headersLabelsText = {"Admin ID", "Admin Name", "Admin Password", "Is Super Admin", "Has Insert Privilege", "Has View/Edit Privilege"};
+        ScrollResultsPanel scrollResultsPanel = new ScrollResultsPanel(6, headersLabelsText);
+        resultsBodyPanel = scrollResultsPanel.getResultsBodyPanel();
         JLabel filterLabel = new JLabel("Filter: ");
         Styles.styleLabel(filterLabel, Color.BLACK);
         filterMenu = new JComboBox<>(new String[]{"", "Admin ID", "Admin Name"});
@@ -78,12 +53,7 @@ public class AdministrationScreen extends JFrame {
         addNewAdminButtonLinkPanel.setBackground(Color.WHITE);
         filterPanel = new JPanel();
         filterPanel.setBackground(Color.WHITE);
-        resultsPanel = new JPanel();
-        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
-        resultsPanel.setPreferredSize(new Dimension(resultsPanel.getPreferredSize().width, resultsPanel.getPreferredSize().height + 200));
-        resultsPanel.setBackground(Color.WHITE);
-        resultsPanel.add(resultsHeaderPanel);
-        resultsPanel.add(resultsBodyPanelScroll);
+        resultsPanel = scrollResultsPanel.getResultsPanel();
         ScreenConfig.initTitleBar(this, "Administration");
         addNewAdminButtonLink = new JButton("Add New Admin");
         addNewAdminButtonLink.addActionListener(new AdministrationScreenListener(this));

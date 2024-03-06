@@ -127,11 +127,8 @@ public class AdministrationScreenListener implements ItemListener, MouseListener
             String filterValue = filterInputField.getText().trim();
             GetAdminsAPICommon commonMethods = new GetAdminsAPICommon(filterMenuSelected, filterValue, resultsBodyPanel);
             try {
-                Response[] responses = commonMethods.getAdmins();
-                if (responses.length > 1) {
-                    JOptionPane.showMessageDialog(null, responses[0].jsonPath().getString("error"), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (URISyntaxException ex) {
+                commonMethods.getAdmins();
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }

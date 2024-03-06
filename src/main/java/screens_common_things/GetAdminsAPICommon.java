@@ -30,7 +30,7 @@ public class GetAdminsAPICommon {
         this.resultsBodyPanel = resultsBodyPanel;
     }
 
-    public Response[] getAdmins() throws URISyntaxException {
+    public void getAdmins() throws Exception {
         URI apiURL = new URI(Host.domainForAPIs + "/getAdmins.php");
         Map<String, String> headers = new HashMap<>();
         headers.put("auth_token", new Session().getAuthToken());
@@ -46,8 +46,7 @@ public class GetAdminsAPICommon {
                         request("GET", apiURL);
         if (response.getStatusCode() == 200) {
             showResults(response);
-            return new Response[]{null};
-        } else return new Response[]{response, null};
+        } else throw new Exception(response.jsonPath().getString("error"));
     }
 
     public void showResults(Response response) {
@@ -71,7 +70,7 @@ public class GetAdminsAPICommon {
         String adminId = object.getString("admin_id");
 
         Color panelColor = Color.WHITE;
-        if(i % 2 == 0) panelColor = Color.BLUE;
+        if(i % 2 == 0) panelColor = Color.LIGHT_GRAY;
 
         JPanel adminIdAndDeleteButtonPanel = new JPanel();
         adminIdAndDeleteButtonPanel.setLayout(new BoxLayout(adminIdAndDeleteButtonPanel, BoxLayout.X_AXIS));
