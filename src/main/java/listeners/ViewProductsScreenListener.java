@@ -1,12 +1,14 @@
 package listeners;
 
 import screens.ViewProductsScreen;
+import screens_common_things.ExportJSONToCSV;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 
 public class ViewProductsScreenListener implements ItemListener, ActionListener {
 
@@ -90,6 +92,20 @@ public class ViewProductsScreenListener implements ItemListener, ActionListener 
             }
             viewProductsScreen.getRightArrow().setVisible(viewProductsScreen.currentRowsNumber != viewProductsScreen.totalRows);
             viewProductsScreen.getLeftArrow().setVisible(true);
+        }
+        else if(e.getActionCommand().equals("Export")) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Set mode to select directories
+            int returnValue = fileChooser.showSaveDialog(viewProductsScreen);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                String selectedDirectory = fileChooser.getSelectedFile().getAbsolutePath();
+                try {
+                    ExportJSONToCSV exportJSONToCSV = new ExportJSONToCSV(selectedDirectory, viewProductsScreen.getAllProducts());
+                    exportJSONToCSV.saveCSV();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 }

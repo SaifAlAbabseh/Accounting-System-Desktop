@@ -134,6 +134,7 @@ public class ViewProductsScreen extends JFrame {
         buttonsPanel.add(filterClearButton);
         filterPanel.add(buttonsPanel);
         exportButton = new JButton("Export");
+        exportButton.addActionListener(new ViewProductsScreenListener(this));
         common.styleButton(exportButton, Color.GREEN, new Dimension(250, 100));
         exportButtonPanel.add(exportButton);
         String[] labelsText = new String[] {"product_id", "admin_id", "name", "buy_price", "quantity", "tax", "discount", "selling_price", "date"};
@@ -246,6 +247,22 @@ public class ViewProductsScreen extends JFrame {
                 resultPanel.add(label);
                 resultsBodyPanel.add(resultPanel);
             }
+        }
+        else throw new Exception(response.jsonPath().getString("error"));
+    }
+
+    public JSONArray getAllProducts() throws Exception{
+        String filters = "?filterMethod=" + filterMethod + "&filterBy=" + currentFilterHeader + "&filterCriteria=" + currentFilterValue + "&isFilterExact=" + isFilterExact;
+        URI apiURL = new URI(Host.domainForAPIs + "/getAllProducts.php" + filters);
+        Map<String, String> headers = new HashMap<>();
+        headers.put("auth_token", new Session().getAuthToken());
+        Response response =
+                RestAssured.
+                        given().
+                        headers(headers).
+                        request("GET", apiURL);
+        if(response.getStatusCode() == 200) {
+            return new JSONArray(response.jsonPath().getList(""));
         }
         else throw new Exception(response.jsonPath().getString("error"));
     }
