@@ -18,7 +18,7 @@ public class GoBackButton {
     private void initComponents() {
         goBackButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         goBackButton = new JButton();
-        ImageIcon icon = new ImageIcon("src/main/resources/images/go-back-arrow.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/go-back-arrow.png"));
         goBackButton.setIcon(icon);
         styleGoBackButton();
         goBackButtonPanel.add(goBackButton);

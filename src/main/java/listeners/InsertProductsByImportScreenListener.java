@@ -83,12 +83,10 @@ public class InsertProductsByImportScreenListener implements ActionListener {
     }
 
     private void saveFile(File selectedDirectory) {
-        File sourceFile = new File("src/main/resources/templates/insert_products_template.csv");
-
         try {
             // Create a destination file in the selected directory
-            File destinationFile = new File(selectedDirectory, sourceFile.getName());
-            InputStream inputStream = new FileInputStream(sourceFile);
+            File destinationFile = new File(selectedDirectory, "insert_products_template.csv");
+            InputStream inputStream = getClass().getResourceAsStream("/insert_products_template.csv");
             OutputStream outputStream = new FileOutputStream(destinationFile);
             byte[] buffer = new byte[1024];
             int length;
@@ -100,7 +98,7 @@ public class InsertProductsByImportScreenListener implements ActionListener {
 
             JOptionPane.showMessageDialog(null, "File saved successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error saving file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error saving file, " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
