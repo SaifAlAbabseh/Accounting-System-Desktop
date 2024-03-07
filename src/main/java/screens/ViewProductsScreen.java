@@ -10,6 +10,8 @@ import util.Host;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,10 +85,10 @@ public class ViewProductsScreen extends JFrame {
         resultsArrowsPanel = new JPanel();
         resultsArrowsPanel.setBackground(Color.WHITE);
         leftArrow = new JButton("<");
-        leftArrow.addActionListener(new ViewProductsScreenListener(this));
+        leftArrow.addActionListener(new ViewProductsScreenListener(this, null, null));
         leftArrow.setVisible(false);
         rightArrow = new JButton(">");
-        rightArrow.addActionListener(new ViewProductsScreenListener(this));
+        rightArrow.addActionListener(new ViewProductsScreenListener(this, null, null));
         styleArrowButton(leftArrow);
         styleArrowButton(rightArrow);
         resultsArrowsPanel.add(leftArrow);
@@ -100,10 +102,10 @@ public class ViewProductsScreen extends JFrame {
         exportButtonPanel.setBackground(Color.WHITE);
         filterByPositionRadioButton = new JRadioButton("<html><font size='100'>Filter By ASC/DESC</font></html>");
         filterByPositionRadioButton.setSelected(true);
-        filterByPositionRadioButton.addItemListener(new ViewProductsScreenListener(this));
+        filterByPositionRadioButton.addItemListener(new ViewProductsScreenListener(this, null, null));
         styleRadioButtons(filterByPositionRadioButton);
         filterByTextRadioButton = new JRadioButton("<html><font size='100'>Filter By Text</font></html>");
-        filterByTextRadioButton.addItemListener(new ViewProductsScreenListener(this));
+        filterByTextRadioButton.addItemListener(new ViewProductsScreenListener(this, null, null));
         styleRadioButtons(filterByTextRadioButton);
         ButtonGroup group = new ButtonGroup();
         group.add(filterByPositionRadioButton);
@@ -116,11 +118,11 @@ public class ViewProductsScreen extends JFrame {
         Styles.styleInputField(filterByMenu);
         initFilterByPosition();
         filterGoButton = new JButton("GO");
-        filterGoButton.addActionListener(new ViewProductsScreenListener(this));
+        filterGoButton.addActionListener(new ViewProductsScreenListener(this, null, null));
         GetAdminsAPICommon common = new GetAdminsAPICommon();
         common.styleButton(filterGoButton, Color.GREEN, new Dimension(100, 100));
         filterClearButton = new JButton("Clear");
-        filterClearButton.addActionListener(new ViewProductsScreenListener(this));
+        filterClearButton.addActionListener(new ViewProductsScreenListener(this, null, null));
         common.styleButton(filterClearButton, Color.GREEN, new Dimension(100, 100));
         JPanel labelWithMenuPanel = new JPanel();
         labelWithMenuPanel.setBackground(Color.WHITE);
@@ -134,7 +136,7 @@ public class ViewProductsScreen extends JFrame {
         buttonsPanel.add(filterClearButton);
         filterPanel.add(buttonsPanel);
         exportButton = new JButton("Export");
-        exportButton.addActionListener(new ViewProductsScreenListener(this));
+        exportButton.addActionListener(new ViewProductsScreenListener(this, null, null));
         common.styleButton(exportButton, Color.GREEN, new Dimension(250, 100));
         exportButtonPanel.add(exportButton);
         String[] labelsText = new String[] {"product_id", "admin_id", "name", "buy_price", "quantity", "tax", "discount", "selling_price", "date"};
@@ -215,36 +217,69 @@ public class ViewProductsScreen extends JFrame {
             currentPageNumOfRows = Integer.parseInt(response.jsonPath().getString("meta_data['available']"));
             for(int i = 0; i < productsArray.length(); i++) {
                 JSONObject productObject = productsArray.getJSONObject(i);
+
+                //---//
+                int productId = productObject.getInt("product_id");
+                int adminId = productObject.getInt("admin_id");
+                String name = productObject.getString("product_name");
+                double price = productObject.getDouble("product_buy_price");
+                int quantity = productObject.getInt("product_quantity");
+                double tax = productObject.getDouble("product_tax");
+                double discount = productObject.getDouble("product_discount");
+                double sellingPrice = productObject.getDouble("product_selling_price");
+                String date = productObject.getString("product_sell_date");
+                //---//
+
+                Color backColor = (i % 2 == 0)?Color.LIGHT_GRAY:Color.WHITE;
                 JPanel resultPanel = new JPanel(new GridLayout(1, 9));
-                resultPanel.setBackground((i % 2 == 0)?Color.LIGHT_GRAY:Color.WHITE);
+                resultPanel.setBackground(backColor);
                 resultPanel.setPreferredSize(new Dimension(resultPanel.getPreferredSize().width, 100));
-                JLabel label = new JLabel("" + productObject.getInt("product_id"));
+                JLabel label = new JLabel("" + productId);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                JPanel firstColWithEditButtonPanel = new JPanel();
+                firstColWithEditButtonPanel.setLayout(new BoxLayout(firstColWithEditButtonPanel, BoxLayout.X_AXIS));
+                firstColWithEditButtonPanel.addMouseListener(new ViewProductsScreenListener(this, firstColWithEditButtonPanel, resultPanel));
+                JButton editButton = new JButton("✎");
+                editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                editButton.setName("" + productId);
+                editButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new UpdateProductSubScreen("viewProductsScreen", ViewProductsScreen.this, "" + productId, name, price, quantity, tax, discount, sellingPrice);
+                    }
+                });
+                editButton.addActionListener(new ViewProductsScreenListener(this, null, null));
+                editButton.setBackground(Color.BLACK);
+                editButton.setPreferredSize(new Dimension(30, 30));
+                firstColWithEditButtonPanel.add(editButton);
+                firstColWithEditButtonPanel.add(label);
+                firstColWithEditButtonPanel.setBackground(backColor);
+                resultPanel.add(firstColWithEditButtonPanel);
+                label = new JLabel("" + adminId);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getInt("admin_id"));
+                label = new JLabel(name);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel(productObject.getString("product_name"));
+                label = new JLabel("" + price);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getDouble("product_buy_price"));
+                label = new JLabel("" + quantity);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getInt("product_quantity"));
+                label = new JLabel("" + tax);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getDouble("product_tax"));
+                label = new JLabel("" + discount);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getDouble("product_discount"));
+                label = new JLabel("" + sellingPrice);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel("" + productObject.getDouble("product_selling_price"));
+                label = new JLabel(date);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 resultPanel.add(label);
-                label = new JLabel(productObject.getString("product_sell_date"));
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                resultPanel.add(label);
+                resultPanel.addMouseListener(new ViewProductsScreenListener(this, firstColWithEditButtonPanel, resultPanel));
                 resultsBodyPanel.add(resultPanel);
             }
         }
